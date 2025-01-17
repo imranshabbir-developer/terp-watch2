@@ -1,13 +1,19 @@
 import Blog from "../models/Blog.js";
 
 export const createBlog = async (req, res) => {
-  const { title, description } = req.body;
-  const image = req.file.path;
+
+    const { title, description } = req.body;
+    const image = req.file.path;
 
   try {
-    const blog = new Blog({ title, description, image, author: req.user.id });
+    const blog = new Blog(
+        { title, description, image, author: req.user.id }
+    );
     await blog.save();
-    res.status(201).send({ message: "Blog created successfully!", blog });
+    res.status(201).send({ 
+            message: "Blog created successfully!", 
+            blog 
+        });
   } catch (error) {
     res.status(500).send({ message: "Something went wrong.", error });
   }
