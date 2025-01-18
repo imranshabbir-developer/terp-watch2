@@ -3,11 +3,13 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
+import colors from 'colors'
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 
 dotenv.config();
@@ -26,6 +28,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/newsletter", newsletterRoutes);
+app.use("/api/comments", commentRoutes);
+
 
 
 // Default route
@@ -35,5 +39,5 @@ app.get("/", (req, res) =>
 
 // Start server
 app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
+  console.log(`Server running on http://localhost:${PORT}`.bgBlue)
 );
