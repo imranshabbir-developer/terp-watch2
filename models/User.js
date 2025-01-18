@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
       required: [true, "Username is required"],
       minlength: [3, "Username must be at least 3 characters long"],
       maxlength: [30, "Username must not exceed 30 characters"],
-      // unique: true,
       trim: true,
     },
     email: {
@@ -21,7 +20,6 @@ const userSchema = new mongoose.Schema(
       //   message: "Please provide a valid email address",
       // },
       // match: [/\S+@\S+\.\S+/, "Please provide a valid email address"],
-
     },
 
 

@@ -7,6 +7,8 @@ import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
+import newsletterRoutes from "./routes/newsletterRoutes.js";
+
 
 dotenv.config();
 const app = express();
@@ -23,6 +25,8 @@ connectDB();
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/newsletter", newsletterRoutes);
+
 
 // Default route
 app.get("/", (req, res) =>
