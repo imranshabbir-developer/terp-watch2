@@ -33,6 +33,10 @@ const blogSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    createdBy: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "User" 
+    },
     likes: {
       type: [mongoose.Schema.Types.ObjectId], // Array of user IDs
       ref: "User",

@@ -10,12 +10,19 @@ export const createBlog = async (req, res) => {
       title,
       description,
       image,
-      createdBy: req.user.id, // Set creator based on logged-in user
+      createdBy: req.user.id, // Set creator based on logged-in user (only admin and super-admin can add / create blog)
     });
 
-    res.status(201).send({ message: "Blog created successfully.", blog });
+    res.status(201).send({ 
+      message: "Blog created successfully.", 
+      blog 
+    });
+
   } catch (error) {
-    res.status(500).send({ message: "Server error.", error: error.message });
+    res.status(500).send({ 
+      message: "Server error.", 
+      error: error.message 
+    });
   }
 };
 

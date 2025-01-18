@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { validateRegister, validateLogin } from "../validations/userValidation.js";
 
 export const registerUser = async (req, res) => {
+  
   try {
     const { username, email, password, role } = req.body;
 
@@ -19,11 +20,12 @@ export const registerUser = async (req, res) => {
       return res.status(400).send({ message: "Email is already registered." });
     }
 
-    // Hash the password
+    // Hashing a plain password (bcypting a password)
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new user
+
+    // Creating a new user / object of user (password will be hashed before saving to DB)
     const user = await User.create({
       username,
       email,
@@ -33,10 +35,19 @@ export const registerUser = async (req, res) => {
 
     return res.status(201).send({
       message: "User registered successfully.",
-      user: { id: user._id, username: user.username, email: user.email, role: user.role },
+      user: { 
+        id: user._id, 
+        username: user.username, 
+        email: user.email, 
+        role: user.role 
+      },
     });
+
   } catch (error) {
-    return res.status(500).send({ message: "Server error.", error: error.message });
+    return res.status(500).send({ 
+      message: "Server error.", 
+      error: error.message 
+    });
   }
 };
 
@@ -50,30 +61,45 @@ export const loginUser = async (req, res) => {
       return res.status(400).send({ message: "Validation error", errors });
     }
 
-    // Check if user exists
+    // Checking if the user already exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).send({ message: "Invalid email or password." });
     }
 
-    // Compare passwords
+    // Comparing a plain password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).send({ message: "Invalid email or password." });
     }
 
-    // Generate JWT
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    // Generating Jsonwebtoken (JWT)
+    const token = jwt.sign(
+        { 
+          id: user._id, 
+          role: user.role 
+        }, 
+          process.env.JWT_SECRET, 
+        {
+          expiresIn: "1d",
+        }
+    );
 
     return res.status(200).send({
       message: "Login successful.",
       token,
-      user: { id: user._id, username: user.username, email: user.email, role: user.role },
+      user: { 
+        id: user._id, 
+        username: user.username, 
+        email: user.email, 
+        role: user.role 
+      },
     });
   } catch (error) {
-    return res.status(500).send({ message: "Server error.", error: error.message });
+    return res.status(500).send({ 
+      message: "Server error.", 
+      error: error.message 
+    });
   }
 };
 
