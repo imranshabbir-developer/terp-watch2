@@ -18,7 +18,11 @@ export const subscribe = async (req, res) => {
 
     // Add new subscriber
     const subscriber = await Subscriber.create({ email });
-    res.status(201).send({ message: "Successfully subscribed to the newsletter.", subscriber });
+    res.status(201).send({ 
+      message: "Successfully subscribed to the newsletter.", 
+      subscriber 
+    });
+    
   } catch (error) {
     res.status(500).send({ message: "Server error.", error: error.message });
   }

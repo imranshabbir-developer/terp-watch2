@@ -63,31 +63,71 @@ export const editComment = async (req, res) => {
   }
 };
 
-// Delete a comment
+
 export const deleteComment = async (req, res) => {
   const { blogId, commentId } = req.params;
 
   try {
+    // Find the blog by its ID
     const blog = await Blog.findById(blogId);
     if (!blog) {
       return res.status(404).send({ message: "Blog not found." });
     }
 
+    // Find the specific comment by its ID
     const comment = blog.comments.id(commentId);
-
     if (!comment) {
       return res.status(404).send({ message: "Comment not found." });
     }
 
+    // Check if the user is authorized to delete the comment
     if (comment.user.toString() !== req.user.id) {
       return res.status(403).send({ message: "Unauthorized to delete this comment." });
     }
 
-    comment.remove();
+    // Remove the comment using pull
+    blog.comments.pull(commentId);
+
+    // Save the blog after removing the comment
     await blog.save();
 
     res.status(200).send({ message: "Comment deleted successfully." });
   } catch (error) {
-    res.status(500).send({ message: "Error deleting comment.", error });
+    res.status(500).send({ message: "Error deleting comment.", error: error.message });
   }
 };
+
+
+
+
+
+
+// Delete a comment
+// export const deleteComment = async (req, res) => {
+//   const { blogId, commentId } = req.params;
+
+//   try {
+//     const blog = await Blog.findById(blogId);
+//     if (!blog) {
+//       return res.status(404).send({ message: "Blog not found." });
+//     }
+
+//     const comment = blog.comments.id(commentId);
+
+//     if (!comment) {
+//       return res.status(404).send({ message: "Comment not found." });
+//     }
+
+//     if (comment.user.toString() !== req.user.id) {
+//       return res.status(403).send({ message: "Unauthorized to delete this comment." });
+//     }
+
+//     comment.remove();
+//     await blog.save();
+
+//     res.status(200).send({ message: "Comment deleted successfully." });
+
+//   } catch (error) {
+//     res.status(500).send({ message: "Error deleting comment.", error });
+//   }
+// };

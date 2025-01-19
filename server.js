@@ -41,3 +41,9 @@ app.get("/", (req, res) =>
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`.bgBlue)
 );
+
+
+
+// All routes API end available 
+// https://documenter.getpostman.com/view/40480608/2sAYQamr8k
+
